@@ -1,0 +1,26 @@
+diff --git a/package/ramsmp/ramsmp.mk b/package/ramsmp/ramsmp.mk
+index 6098376da5..5e52bc2e15 100644
+--- a/package/ramsmp/ramsmp.mk
++++ b/package/ramsmp/ramsmp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RAMSMP_VERSION = 3.5.0
+-RAMSMP_SITE = http://www.alasir.com/software/ramspeed
++RAMSMP_SITE = https://web.archive.org/web/20220807183805/http://alasir.com/software/ramspeed
+ RAMSMP_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
+ RAMSMP_LICENSE = Alasir License
+ RAMSMP_LICENSE_FILES = LICENCE
+diff --git a/package/ramspeed/ramspeed.mk b/package/ramspeed/ramspeed.mk
+index 7dc4faae7c..bed766f964 100644
+--- a/package/ramspeed/ramspeed.mk
++++ b/package/ramspeed/ramspeed.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RAMSPEED_VERSION = 2.6.0
+-RAMSPEED_SITE = http://www.alasir.com/software/ramspeed
++RAMSPEED_SITE = https://web.archive.org/web/20220807183805/http://alasir.com/software/ramspeed
+ RAMSPEED_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
+ RAMSPEED_LICENSE = Alasir License
+ RAMSPEED_LICENSE_FILES = LICENCE

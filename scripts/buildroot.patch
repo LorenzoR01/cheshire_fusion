@@ -1,0 +1,13 @@
+diff --git a/.gitmodules b/.gitmodules
+index a8484c6..88c2007 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -8,7 +8,7 @@
+ 	branch = master
+ [submodule "buildroot"]
+ 	path = buildroot
+-	url = git://git.buildroot.net/buildroot
++	url = https://github.com/buildroot/buildroot.git
+ [submodule "vitetris"]
+ 	path = vitetris
+ 	url = https://github.com/pulp-platform/vitetris.git
