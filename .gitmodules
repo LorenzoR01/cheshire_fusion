@@ -6,7 +6,3 @@
 	path = sw/deps/cva6-sdk
 	url = https://github.com/pulp-platform/cva6-sdk.git
 	ignore = dirty
-[submodule "sw/deps/embench-iot"]
-	path = sw/deps/embench-iot
-	url = https://github.com/ricted98/embench-iot
-	branch = rt/cheshire
