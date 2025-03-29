@@ -132,7 +132,8 @@ module vip_cheshire_soc import cheshire_pkg::*; #(
       .WarnUninitialized  ( 0 ),
       .ClearErrOnAccess   ( 1 ),
       .ApplDelay          ( ClkPeriodSys * TAppl ),
-      .AcqDelay           ( ClkPeriodSys * TTest )
+      .AcqDelay           ( ClkPeriodSys * TTest ),
+      .UninitializedData  ("zeros")
     ) i_dram_sim_mem (
       .clk_i              ( clk   ),
       .rst_ni             ( rst_n ),

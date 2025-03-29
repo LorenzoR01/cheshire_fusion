@@ -10,3 +10,4 @@
 	path = sw/deps/embench-iot
 	url = https://github.com/ricted98/embench-iot
 	branch = rt/cheshire
+	ignore = dirty

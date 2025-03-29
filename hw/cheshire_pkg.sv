@@ -516,6 +516,9 @@ package cheshire_pkg;
     ret.BTBEntries            = cfg.Cva6BTBEntries;
     ret.BHTEntries            = cfg.Cva6BHTEntries;
     ret.NrPMPEntries          = cfg.Cva6NrPMPEntries;
+    ret.SuperscalarEn         = 0;
+    ret.RVF                   = 0;
+    ret.RVD                   = 0;
     // Return modified config
     return ret;
   endfunction
