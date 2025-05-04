@@ -1,0 +1,181 @@
+set BINARY ../../../sw/deps/embench-iot/bd/src/aha-mont64/aha-mont64
+set BOOTMODE 0
+set PRELMODE 1
+source compile.cheshire_soc.tcl
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_aha-mont64.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_aha-mont64.log
+
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/crc32/crc32
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_crc32.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_crc32.log
+
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/cubic/cubic
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_cubic.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_cubic.log
+
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/edn/edn
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_edn.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_edn.log
+
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/huffbench/huffbench
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_huffbench.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_huffbench.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/matmult-int/matmult-int
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_matmult-int.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_matmult-int.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/md5sum/md5sum
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_md5sum.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_md5sum.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/minver/minver
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_minver.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_minver.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/nbody/nbody
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_nbody.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_nbody.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/nettle-aes/nettle-aes
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_nettle-aes.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_nettle-aes.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/nettle-sha256/nettle-sha256
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_nettle-sha256.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_nettle-sha256.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/nsichneu/nsichneu
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_nsichneu.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_nsichneu.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/picojpeg/picojpeg
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_picojpeg.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_picojpeg.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/primecount/primecount
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_primecount.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_primecount.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/qrduino/qrduino
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_qrduino.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_qrduino.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/sglib-combined/sglib-combined
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_sglib-combined.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_sglib-combined.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/slre/slre
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_slre.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_slre.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/st/st
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_st.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_st.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/statemate/statemate
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_statemate.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_statemate.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/tarfind/tarfind
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_tarfind.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_tarfind.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/ud/ud
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_ud.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_ud.log
+
+set BINARY ../../../sw/deps/embench-iot/bd/src/wikisort/wikisort
+set BOOTMODE 0
+set PRELMODE 1
+source start.cheshire_soc.tcl
+run -all
+cp trace_hart_0.log ../../../tracelogs/trace_hart_0_wikisort.log
+cp trace_hart_0_commit.log ../../../tracelogs/trace_hart_0_commit_wikisort.log
+
