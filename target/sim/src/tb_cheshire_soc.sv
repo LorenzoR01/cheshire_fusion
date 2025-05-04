@@ -65,7 +65,7 @@ module tb_cheshire_soc #(
     // Wait for the UART to finish reading the current byte
     wait (fix.vip.uart_reading_byte == 0);
 
-    $finish;
+    $stop;
   end
 
 endmodule

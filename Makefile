@@ -7,8 +7,8 @@
 # Paul Scheffler <paulsc@iis.ee.ethz.ch>
 
 CHS_ROOT := $(shell realpath .)
-BENDER	 ?= bender -d $(CHS_ROOT)
-
+# BENDER	 ?= bender -d $(CHS_ROOT)
+BENDER := /srv/home/lorenzo.ridolfi6/bender
 all:
 
 include cheshire.mk

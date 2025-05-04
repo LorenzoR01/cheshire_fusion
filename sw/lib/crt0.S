@@ -69,6 +69,7 @@ _zero_bss_rem:
     bgt t2, x0, _zero_bss_rem
 
 _fp_init:
+    # if defined(__riscv_flen) && __riscv_flen > 0
     // Set FS state to "Initial", enabling FP instructions
     li t1, 1
     slli t1, t1, 13
@@ -110,7 +111,7 @@ _fp_init:
 
     // Set FS state to "Clean"
     csrrc x0, mstatus, t1
-
+    # endif
     // Full fence, then jump to main
     fence
     call main
