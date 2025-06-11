@@ -560,6 +560,20 @@ module cheshire_soc import cheshire_pkg::*; #(
 
   localparam config_pkg::cva6_user_cfg_t Cva6Cfg = gen_cva6_cfg(Cfg);
 
+
+  `include "rvfi_types.svh"
+
+  localparam type rvfi_instr_t = `RVFI_INSTR_T(build_config_pkg::build_config(Cva6Cfg));
+  localparam type rvfi_csr_elmt_t = `RVFI_CSR_ELMT_T(build_config_pkg::build_config(Cva6Cfg));
+  localparam type rvfi_csr_t = `RVFI_CSR_T(build_config_pkg::build_config(Cva6Cfg), rvfi_csr_elmt_t);
+
+  localparam type rvfi_probes_instr_t = `RVFI_PROBES_INSTR_T(build_config_pkg::build_config(Cva6Cfg));
+  localparam type rvfi_probes_csr_t = `RVFI_PROBES_CSR_T(build_config_pkg::build_config(Cva6Cfg));
+  localparam type rvfi_probes_t = struct packed {
+    rvfi_probes_csr_t   csr;
+    rvfi_probes_instr_t instr;
+  };
+
   // Boot from boot ROM only if available, otherwise from platform ROM
   localparam logic [63:0] BootAddr = 64'(Cfg.Bootrom ? AmBrom : Cfg.PlatformRom);
 
@@ -599,6 +613,10 @@ module cheshire_soc import cheshire_pkg::*; #(
     logic [7:0]        clic_irq_level;
     riscv::priv_lvl_t  clic_irq_priv;
 
+    rvfi_instr_t [build_config_pkg::build_config(Cva6Cfg).NrCommitPorts-1:0] rvfi_instr;
+    rvfi_probes_t rvfi_probes;
+    rvfi_csr_t rvfi_csr;
+
     cva6 #(
       .CVA6Cfg        ( build_config_pkg::build_config(Cva6Cfg) ),
       .axi_ar_chan_t  ( axi_cva6_ar_chan_t ),
@@ -607,7 +625,10 @@ module cheshire_soc import cheshire_pkg::*; #(
       .b_chan_t       ( axi_cva6_b_chan_t  ),
       .r_chan_t       ( axi_cva6_r_chan_t  ),
       .noc_req_t      ( axi_cva6_req_t ),
-      .noc_resp_t     ( axi_cva6_rsp_t )
+      .noc_resp_t     ( axi_cva6_rsp_t ),
+      .rvfi_probes_instr_t  ( rvfi_probes_instr_t ),
+      .rvfi_probes_csr_t    ( rvfi_probes_csr_t   ),
+      .rvfi_probes_t        ( rvfi_probes_t       )
     ) i_core_cva6 (
       .clk_i,
       .rst_ni,
@@ -627,11 +648,41 @@ module cheshire_soc import cheshire_pkg::*; #(
       .clic_kill_req_i  ( clic_irq_kill_req ),
       .clic_kill_ack_o  ( clic_irq_kill_ack ),
       `endif
-      .rvfi_probes_o    ( ),
+      .rvfi_probes_o    ( rvfi_probes ),
       .cvxif_req_o      ( ),
       .cvxif_resp_i     ( '0 ),
       .noc_req_o        ( core_out_req ),
       .noc_resp_i       ( core_out_rsp )
+    );
+
+    cva6_rvfi #(
+      .CVA6Cfg   (build_config_pkg::build_config(Cva6Cfg)),
+      .rvfi_instr_t(rvfi_instr_t),
+      .rvfi_csr_t(rvfi_csr_t),
+      .rvfi_probes_instr_t(rvfi_probes_instr_t),
+      .rvfi_probes_csr_t(rvfi_probes_csr_t),
+      .rvfi_probes_t(rvfi_probes_t)
+    ) i_cva6_rvfi (
+      .clk_i     (clk_i),
+      .rst_ni    (rst_ni),
+      .rvfi_probes_i (rvfi_probes),
+      .rvfi_instr_o (rvfi_instr),
+      .rvfi_csr_o(rvfi_csr)
+    );
+
+    rvfi_tracer  #(
+      .CVA6Cfg(build_config_pkg::build_config(Cva6Cfg)),
+      .rvfi_instr_t(rvfi_instr_t),
+      .rvfi_csr_t(rvfi_csr_t),
+      .HART_ID(8'h0),
+      .DEBUG_START(0),
+      .DEBUG_STOP(0)
+    ) i_rvfi_tracer (
+      .clk_i(clk_i),
+      .rst_ni(rst_ni),
+      .rvfi_i(rvfi_instr),
+      .rvfi_csr_i(rvfi_csr),
+      .end_of_test_o()
     );
 
     if (Cfg.BusErr) begin : gen_cva6_bus_err
