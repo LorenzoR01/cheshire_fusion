@@ -63,22 +63,33 @@ def parse_trace_line(line: str) -> Instruction:
             rd = operands[0]  # Handle c.li and similar instructions
             imm_offset = operands[1]
         else:
-            if re.match(r'^[a-zA-Z]+\d+$', operands[0]) or operands[0] in {'ra', 'sp', 'gp'}:
-                rd = operands[0]
+            if mnemonic in {'beqz', 'bne', 'beq', 'blt', 'bgt', 'ble', 'bge', 'bltu', 'bgtu', 'bgeu', 'bleu', 'bnez', 'bltz', 'bgtz', 'blez', 'bgez'}:
+                # Branch instructions
+                if len(operands) == 3:
+                    rd = None
+                    rs1 = operands[0]
+                    rs2 = operands[1]
+                else:
+                    rd = None
+                    rs1 = operands[0]
+                    rs2 = None
             else:
-                rd = None
-            for op in operands[1:]:
-                if re.match(r'^[a-zA-Z]+\d+$', op) or op in {'ra', 'sp', 'gp'}:  # Register (rs1 or rs2)
-                    if rs1 is None:
-                        rs1 = op
-                    else:
-                        rs2 = op
-                elif re.match(r'^\d+$', op):  # Immediate/Offset
-                    imm_offset = op
-                elif re.match(r'-?\d+\([a-zA-Z]+\d+\)', op):  # Number(Register)
-                    num, reg = re.findall(r'-?\d+|[a-zA-Z]+\d+', op)
-                    rs1 = reg
-                    imm_offset = num
+                if re.match(r'^[a-zA-Z]+\d+$', operands[0]) or operands[0] in {'ra', 'sp', 'gp'}:
+                    rd = operands[0]
+                else:
+                    rd = None
+                for op in operands[1:]:
+                    if re.match(r'^[a-zA-Z]+\d+$', op) or op in {'ra', 'sp', 'gp'}:  # Register (rs1 or rs2)
+                        if rs1 is None:
+                            rs1 = op
+                        else:
+                            rs2 = op
+                    elif re.match(r'^-?\d+$', op):  # Immediate/Offset
+                        imm_offset = op
+                    elif re.match(r'-?\d+\([a-zA-Z]+\d+\)', op):  # Number(Register)
+                        num, reg = re.findall(r'-?\d+|[a-zA-Z]+\d+', op)
+                        rs1 = reg
+                        imm_offset = num
 
     # Extract register values and memory address
     register_values = {}
@@ -113,6 +124,19 @@ def parse_trace_file(filename: str) -> List[Instruction]:
             instructions.append(parse_trace_line(line))
     return instructions
 
+def filter_benchmark_part(all_instructions):
+    "Keep only benchmark part from a trace"
+    filtered = []
+    # re_csrr_minstret = re.compile(r"^csrr\s+\w\w,\s*minstret$")
+    accepting = False
+    for instr in all_instructions:
+        # if re_csrr_minstret.search(instr.mnemo):
+        if "32951073" in instr.opcode:
+            accepting = not accepting
+            continue
+        if accepting:
+            filtered.append(instr)
+    return filtered
 
 # Example Usage
 # instructions = parse_trace_file("/home/ms_lridolfi/cheshire_fusion/tracelogs/trace_hart_0_crc32.log")
@@ -122,7 +146,7 @@ def parse_trace_file(filename: str) -> List[Instruction]:
 
 testname = sys.argv[1]
 instructions = parse_trace_file("../tracelogs/trace_hart_0_"+testname+".log")
-
+instructions = filter_benchmark_part(instructions)
 
 excluded_mnemonics = {'csrr', 'jal', 'c.jr', 'jr',}
 #  'ld', 'sd', 'lw', 'sw', 'c.lw', 'lbu', 'sbu', 'lb', 'sb', 'mul', 'mulhu'
@@ -130,11 +154,11 @@ excluded_mnemonics = {'csrr', 'jal', 'c.jr', 'jr',}
 stats = defaultdict(int)
 
 instret = len(instructions)
-
-for old, young in zip(instructions, instructions[1:]):
-    if (old.mnemonic in excluded_mnemonics or young.mnemonic in excluded_mnemonics):
+print("Benchmark: "+testname, "Instructions: "+str(instret))
+for very_old, old, young in zip(instructions, instructions[1:], instructions[2:]):
+    if (very_old.mnemonic in excluded_mnemonics or old.mnemonic in excluded_mnemonics):
         continue
-    if (old.rd.id is None):
+    if (very_old.rd.id is None):
         continue
 
     # check if both instructions are inside the same 64 bit aligned interval
@@ -144,8 +168,14 @@ for old, young in zip(instructions, instructions[1:]):
     #    if(int(young.pc,16) + 3 > (int(young.pc,16) - int(young.pc,16)%8) + 7): 
     #        continue
 
-    if ((old.rd.id == young.rs1.id or old.rd.id == young.rs2.id) and old.rd.id == young.rd.id):
-        stats[f'{old.mnemonic}+{young.mnemonic}'] += 1
+    if ((very_old.rd.id == old.rs1.id or very_old.rd.id == old.rs2.id) and (very_old.rd.id == old.rd.id or old.rd.id == None)):
+        stats[f'{very_old.mnemonic}+{old.mnemonic}'] += 1
+    # fusions with different rd
+    #elif((very_old.rd.id == old.rs1.id or very_old.rd.id == old.rs2.id) and ((very_old.rd.id == young.rd.id) and (young.rs1.id != very_old.rd.id) and (young.rs2.id != very_old.rd.id))):
+    #    stats[f'{very_old.mnemonic}+{old.mnemonic}'] += 1
+    # non contiguous fusions
+    #elif((very_old.rd.id == young.rs1.id or very_old.rd.id == young.rs2.id) and (very_old.rd.id == young.rd.id or young.rd.id == None) and old.rs1.id != very_old.rd.id and old.rs2.id != very_old.rd.id and old.rd.id != very_old.rd.id and not(old.mnemonic in excluded_mnemonics)):
+    #    stats[f'{very_old.mnemonic}+{young.mnemonic}'] += 1
 
 data = []
 
