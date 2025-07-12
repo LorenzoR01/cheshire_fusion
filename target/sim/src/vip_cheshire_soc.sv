@@ -334,7 +334,16 @@ module vip_cheshire_soc import cheshire_pkg::*; #(
       byte bf[] = new [sec_len];
       $display("[JTAG] Preloading section at 0x%h (%0d bytes)", sec_addr, sec_len);
       if (read_section(sec_addr, bf, sec_len)) $fatal(1, "[JTAG] Failed to read ELF section!");
-      jtag_write(dm::SBCS, JtagInitSbcs, 1, 1);
+      jtag_write(dm::Command, {
+      8'h0, // cmdtype
+      1'h0, // reserved
+      cva6_config_pkg::CVA6ConfigXlen == 32 ? 3'h2 : 3'h3, // aarsize
+      1'h0, // aarpostincrement
+      1'h0, // postexec
+      1'h1, // transfer
+      1'h1, // write
+      16'h07b1 // regno
+      }, 0, 1);
       // Write address as 64-bit double
       jtag_write(dm::SBAddress1, sec_addr[63:32]);
       jtag_write(dm::SBAddress0, sec_addr[31:0]);
