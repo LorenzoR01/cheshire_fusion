@@ -17,7 +17,7 @@ VLOGAN_ARGS ?= -kdb -nc -assert svaext +v2k -timescale=1ns/1ps
 
 # Common Bender flags for Cheshire RTL
 # CHS_CVA6_CONFIG      ?= cv64a6_imafdc_sv39_wb #64b config
-CHS_CVA6_CONFIG      ?= cv32a6_imac_sv0 #cv32a65x  #32b config 
+CHS_CVA6_CONFIG      ?= cv32a65x #32b config 
 CHS_BENDER_RTL_FLAGS ?= -t rtl -t cva6 -t $(CHS_CVA6_CONFIG)
 
 # Infer XLEN from CVA6 target
