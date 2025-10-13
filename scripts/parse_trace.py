@@ -150,6 +150,8 @@ instructions = filter_benchmark_part(instructions)
 
 excluded_mnemonics = {'csrr', 'jal', 'c.jr', 'jr',}
 #  'ld', 'sd', 'lw', 'sw', 'c.lw', 'lbu', 'sbu', 'lb', 'sb', 'mul', 'mulhu'
+special_mnemonics = {'csrr', 'csrw', 'jal', 'c.jr', 'jr', 'ld', 'sd', 'lw', 'sw', 'lh', 'sh', 'lb', 'sb', 'lbu'}
+
 
 stats = defaultdict(int)
 
@@ -161,20 +163,23 @@ for very_old, old, young in zip(instructions, instructions[1:], instructions[2:]
     if (very_old.rd.id is None):
         continue
 
-    # check if both instructions are inside the same 64 bit aligned interval
-    #if ((int(old.pc,16) - int(old.pc,16)%8)) != (int(young.pc,16) - int(young.pc,16)%8): # check if both instructions have pc inside the 64 bit interval
-    #    continue
-    #if (young.mnemonic[0:2] != "c."): # check if second instruction is fully contained inside the 64 bit interval
-    #    if(int(young.pc,16) + 3 > (int(young.pc,16) - int(young.pc,16)%8) + 7): 
-    #        continue
-
     if ((very_old.rd.id == old.rs1.id or very_old.rd.id == old.rs2.id) and (very_old.rd.id == old.rd.id or old.rd.id == None)):
         stats[f'{very_old.mnemonic}+{old.mnemonic}'] += 1
-    # fusions with different rd
+
+    # fusions with different rd, example add+ld fusion with addi overwriting a4
+    # add a4, a4, a5 
+    # ld a3, 0(a4) 
+    # addi a4, a3, 0 
+
     #elif((very_old.rd.id == old.rs1.id or very_old.rd.id == old.rs2.id) and ((very_old.rd.id == young.rd.id) and (young.rs1.id != very_old.rd.id) and (young.rs2.id != very_old.rd.id))):
     #    stats[f'{very_old.mnemonic}+{old.mnemonic}'] += 1
-    # non contiguous fusions
-    #elif((very_old.rd.id == young.rs1.id or very_old.rd.id == young.rs2.id) and (very_old.rd.id == young.rd.id or young.rd.id == None) and old.rs1.id != very_old.rd.id and old.rs2.id != very_old.rd.id and old.rd.id != very_old.rd.id and not(old.mnemonic in excluded_mnemonics)):
+
+    # non contiguous fusions, example add+ld fusion with sub in between
+    # add a4, a4, a5 
+    # sub a3, a5, a6 
+    # ld a4, 0(a4)
+
+    #elif((very_old.rd.id == young.rs1.id or very_old.rd.id == young.rs2.id) and (very_old.rd.id == young.rd.id or young.rd.id == None) and old.rs1.id != very_old.rd.id and old.rs2.id != very_old.rd.id and old.rd.id != very_old.rd.id and not(old.mnemonic in special_mnemonics)):
     #    stats[f'{very_old.mnemonic}+{young.mnemonic}'] += 1
 
 data = []
